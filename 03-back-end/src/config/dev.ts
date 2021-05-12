@@ -20,7 +20,7 @@ const Config: IConfig = {
         password: "root",
         database: "aplikacija",
         charset: "utf8",
-        timezone: "=01:00",
+        timezone: "+01:00",
     },
 };
 
