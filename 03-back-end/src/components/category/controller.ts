@@ -27,7 +27,7 @@ class CategoryController {
 
         const category: CategoryModel|null = await this.categoryService.getById(+id);
 
-        if (categoryId == null) {
+        if (category == null) {
             res.sendStatus(404);
             return;
         }
