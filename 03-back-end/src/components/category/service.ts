@@ -2,6 +2,7 @@ import CategoryModel from './model';
 import * as mysql2 from 'mysql2/promise';
 import IModelAdapterOptions from '../../common/IModelAdapterOptions.interface';
 import IErrorResponse from '../../common/IErrorResponse.interface';
+import { IAddCategory } from './dto/AddCategory';
 class CategoryService {
     private db: mysql2.Connection;
     constructor(db: mysql2.Connection) {
@@ -115,5 +116,26 @@ class CategoryService {
                 });
         });
     }
+
+    public async add(data: IAddCategory): Promise<CategoryModel|IErrorResponse> {
+        return new Promise<CategoryModel|IErrorResponse>(async resolve => {
+            const sql = 'INSERT category SET name = ?, image_path = ?, parent__category_id = ?;';
+           
+            this.db.execute(sql, [ data.name, data.imagePath, data.parentCategoryId ?? null ])
+                .then(async result => {
+                    const insertInfo: any = result[0];
+
+                    const newCategoryId: number = +(insertInfo?.insertId);
+                    resolve(await this.getById(newCategoryId));
+                })
+                .catch(error => {
+                    resolve({
+                        errorCode: error?.errno,
+                        errorMessage: error?.sqlMessage
+                    });
+                });
+        });
+    }
 }
+
 export default CategoryService;
