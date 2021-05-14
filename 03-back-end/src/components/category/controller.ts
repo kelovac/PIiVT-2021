@@ -30,14 +30,19 @@ class CategoryController {
             return;
         }
 
-        const data: CategoryModel|null|IErrorResponse = await this.categoryService.getById(+id);
+        const data: CategoryModel|null|IErrorResponse = await this.categoryService.getById(
+            categoryId,
+            {
+                loadSubcategories: true,
+            }
+        );
 
-        if (data == null) {
+        if (data === null) {
             res.sendStatus(404);
             return;
         }
 
-        if (data instanceof CategoryModel){
+        if (data instanceof CategoryModel) {
             res.send(data);
             return;
         }
@@ -54,7 +59,7 @@ class CategoryController {
         }
 
         const result = await this.categoryService.add(data as IAddCategory);
-    
+
         res.send(result);
     }
 
@@ -76,18 +81,18 @@ class CategoryController {
         }
 
         const result = await this.categoryService.edit(
-            categoryId, 
+            categoryId,
             data as IEditCategory,
-                {
-                     loadSubcategories: true,
-                }
+            {
+                loadSubcategories: true,
+            }
         );
-    
-        if (data == null) {
+
+        if (result === null) {
             res.sendStatus(404);
             return;
         }
-        
+
         res.send(result);
     }
 
@@ -103,7 +108,6 @@ class CategoryController {
 
         res.send(await this.categoryService.delete(categoryId));
     }
-
 }
 
 export default CategoryController;

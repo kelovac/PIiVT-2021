@@ -4,6 +4,7 @@ import IErrorResponse from '../../common/IErrorResponse.interface';
 import { IAddCategory } from './dto/AddCategory';
 import BaseService from '../../services/BaseService';
 import { IEditCategory } from './dto/EditCategory';
+import { resolve } from 'path';
 
 class CategoryModelAdapterOptions implements IModelAdapterOptions {
     loadParentCategory: boolean = false;
@@ -16,6 +17,7 @@ class CategoryService extends BaseService<CategoryModel> {
         options: Partial<CategoryModelAdapterOptions> = { }
     ): Promise<CategoryModel> {
         const item: CategoryModel = new CategoryModel();
+
         item.categoryId = +(row?.category_id);
         item.name = row?.name;
         item.imagePath = row?.image_path;
@@ -23,6 +25,7 @@ class CategoryService extends BaseService<CategoryModel> {
 
         if (options.loadParentCategory && item.parentCategoryId !== null) {
             const data = await this.getById(item.parentCategoryId);
+
             if (data instanceof CategoryModel) {
                 item.parentCategory = data;
             }
@@ -35,10 +38,12 @@ class CategoryService extends BaseService<CategoryModel> {
                     loadSubcategories: true,
                 }
             );
+
             if (Array.isArray(data)) {
                 item.subcategories = data;
             }
         }
+
         return item;
     }
 
@@ -90,10 +95,10 @@ class CategoryService extends BaseService<CategoryModel> {
                 .then(async result => {
                     // const [ insertInfo ] = result;
                     const insertInfo: any = result[0];
+
                     const newCategoryId: number = +(insertInfo?.insertId);
                     resolve(await this.getById(newCategoryId));
                 })
-
                 .catch(error => {
                     resolve({
                         errorCode: error?.errno,
@@ -147,25 +152,25 @@ class CategoryService extends BaseService<CategoryModel> {
             this.db.execute(sql, [categoryId])
                 .then(async result => {
                     const deleteInfo: any = result[0];
-                    const deletedRowCount: number = +(deleteInfo.affectedRows);
+                    const deletedRowCount: number = +(deleteInfo?.affectedRows);
 
-                    if (deletedRowCount === 1){
-                            resolve({
-                                errorCode: 0,
-                                errorMessage: "One record deleted."
-                            });
-                    } else{
-                            resolve({
-                                errorCode: -1,
-                                errorMessage: "This record could not be deleted because it does not exist"
-                            });
+                    if (deletedRowCount === 1) {
+                        resolve({
+                            errorCode: 0,
+                            errorMessage: "One record deleted."
+                        });
+                    } else {
+                        resolve({
+                            errorCode: -1,
+                            errorMessage: "This record could not be deleted because it does not exist."
+                        });
                     }
                 })
                 .catch(error => {
                     if (error?.errno === 1451) {
                         resolve({
                             errorCode: -2,
-                            errorMessage: "This category could not be deleted because it has subcategories."
+                            errorMessage: "This record could not be deleted beucase it has subcategories."
                         });
                         return;
                     }
@@ -174,7 +179,7 @@ class CategoryService extends BaseService<CategoryModel> {
                         errorCode: error?.errno,
                         errorMessage: error?.sqlMessage
                     });
-                });
+                })
         });
     }
 }
