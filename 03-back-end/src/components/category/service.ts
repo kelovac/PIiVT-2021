@@ -16,7 +16,6 @@ class CategoryService extends BaseService<CategoryModel> {
         options: Partial<CategoryModelAdapterOptions> = { }
     ): Promise<CategoryModel> {
         const item: CategoryModel = new CategoryModel();
-
         item.categoryId = +(row?.category_id);
         item.name = row?.name;
         item.imagePath = row?.image_path;
@@ -24,53 +23,57 @@ class CategoryService extends BaseService<CategoryModel> {
 
         if (options.loadParentCategory && item.parentCategoryId !== null) {
             const data = await this.getById(item.parentCategoryId);
-
             if (data instanceof CategoryModel) {
                 item.parentCategory = data;
             }
         }
 
         if (options.loadSubcategories) {
-            const data = await this.getAllByParentCategoryId(item.categoryId);
-
+            const data = await this.getAllByParentCategoryId(
+                item.categoryId,
+                {
+                    loadSubcategories: true,
+                }
+            );
             if (Array.isArray(data)) {
                 item.subcategories = data;
             }
         }
-
         return item;
     }
 
-    public async getAll(): Promise<CategoryModel[]|IErrorResponse> {
+    public async getAll(
+        options: Partial<CategoryModelAdapterOptions> = { },
+    ): Promise<CategoryModel[]|IErrorResponse> {
         return await this.getAllByFieldNameFromTable<CategoryModelAdapterOptions>(
             'category',
             'parent__category_id',
             null,
-            {
-                loadSubcategories: true,
-            }
+            options,
         );
     }
 
-    public async getAllByParentCategoryId(parentCategoryId: number): Promise<CategoryModel[]|IErrorResponse> {
+    public async getAllByParentCategoryId(
+        parentCategoryId: number,
+        options: Partial<CategoryModelAdapterOptions> = { },
+    ): Promise<CategoryModel[]|IErrorResponse> {
         return await this.getAllByFieldNameFromTable<CategoryModelAdapterOptions>(
             'category',
             'parent__category_id',
             parentCategoryId,
-            {
-                loadSubcategories: true,
-            }
+            options,
         );
     }
 
-    public async getById(categoryId: number): Promise<CategoryModel|null|IErrorResponse> {
+    public async getById(
+        categoryId: number,
+        options: Partial<CategoryModelAdapterOptions> = { },
+    ): Promise<CategoryModel|null|IErrorResponse> {
         return await this.getByIdFromTable<CategoryModelAdapterOptions>(
             "category",
-             categoryId,
-             {
-                loadSubcategories: true,
-             }
-             );
+            categoryId,
+            options,
+        );
     }
 
     public async add(data: IAddCategory): Promise<CategoryModel|IErrorResponse> {
@@ -87,10 +90,10 @@ class CategoryService extends BaseService<CategoryModel> {
                 .then(async result => {
                     // const [ insertInfo ] = result;
                     const insertInfo: any = result[0];
-
                     const newCategoryId: number = +(insertInfo?.insertId);
                     resolve(await this.getById(newCategoryId));
                 })
+
                 .catch(error => {
                     resolve({
                         errorCode: error?.errno,
@@ -100,17 +103,18 @@ class CategoryService extends BaseService<CategoryModel> {
         });
     }
 
-    public async edit(categoryId: number, data: IEditCategory): Promise<CategoryModel|IErrorResponse|null> {
+    public async edit(
+        categoryId: number,
+        data: IEditCategory,
+        options: Partial<CategoryModelAdapterOptions> = { },
+    ): Promise<CategoryModel|IErrorResponse|null> {
         const result = await this.getById(categoryId);
-
         if (result === null) {
             return null;
         }
-
         if (!(result instanceof CategoryModel)) {
             return result;
         }
-
         return new Promise<CategoryModel|IErrorResponse>(async resolve => {
             const sql = `
                 UPDATE
@@ -120,10 +124,9 @@ class CategoryService extends BaseService<CategoryModel> {
                     image_path = ?
                 WHERE
                     category_id = ?;`;
-
             this.db.execute(sql, [ data.name, data.imagePath, categoryId ])
                 .then(async result => {
-                    resolve(await this.getById(categoryId));
+                    resolve(await this.getById(categoryId, options));
                 })
                 .catch(error => {
                     resolve({
@@ -134,5 +137,4 @@ class CategoryService extends BaseService<CategoryModel> {
         });
     }
 }
-
 export default CategoryService;
