@@ -7,7 +7,7 @@ export default interface IConfig {
             cacheControl: boolean,
             dotfiles: "deny" | "allow",
             etag: boolean,
-            idnex: boolean,
+            index: boolean,
             maxAge: number,
         }
     },

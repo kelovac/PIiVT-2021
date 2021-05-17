@@ -1,11 +1,13 @@
 import * as express from "express";
 import * as cors from "cors";
 import Config from "./config/dev";
-import CategoryRouter from "./components/category/router";
+import CategoryRouter from './components/category/router';
 import * as mysql2 from "mysql2/promise";
 import IApplicationResources from './common/IApplicationResources.interface';
-import Router from "./router";
-import FeatureRouter from "./components/feature/router";
+import Router from './router';
+import FeatureRouter from './components/feature/router';
+import CategoryService from './components/category/service';
+import FeatureService from './components/feature/service';
 
 async function main() {
     const application: express.Application = express();
@@ -28,10 +30,15 @@ async function main() {
 
     resources.databaseConnection.connect();
 
-    application.use( 
+    resources.services = {
+        categoryService: new CategoryService(resources),
+        featureService:  new FeatureService(resources),
+    };
+
+    application.use(
         Config.server.static.route,
         express.static(Config.server.static.path, {
-            index: Config.server.static.idnex,
+            index: Config.server.static.index,
             cacheControl: Config.server.static.cacheControl,
             maxAge: Config.server.static.maxAge,
             etag: Config.server.static.etag,
@@ -42,8 +49,9 @@ async function main() {
     Router.setupRoutes(application, resources, [
         new CategoryRouter(),
         new FeatureRouter(),
+        // ...
     ]);
-    
+
     application.use((req, res) => {
         res.sendStatus(404);
     });
@@ -53,6 +61,6 @@ async function main() {
     });
 
     application.listen(Config.server.port);
-    }
+}
 
 main();
