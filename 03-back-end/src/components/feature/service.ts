@@ -1,12 +1,10 @@
 import IModelAdapterOptionsInterface from '../../common/IModelAdapterOptions.interface';
 import BaseService from '../../common/BaseService';
 import FeatureModel from './model';
-import * as mysql2 from "mysql2/promise";
-import CategoryService from '../category/service';
-import CategoryModel from '../../../dist/components/category/model';
-import IErrorResponse from '../../../dist/common/IErrorResponse.interface';
 import { IAddFeature } from './dto/AddFeature';
 import { IEditFeature } from './dto/EditFeature';
+import CategoryModel from '../category/model';
+import IErrorResponse from '../../common/IErrorResponse.interface';
 
 class FeatureModelAdapterOptions implements IModelAdapterOptionsInterface {
     loadCategory: boolean = false;
@@ -92,43 +90,6 @@ class FeatureService extends BaseService<FeatureModel> {
                     resolve(await this.getById(featureId, options));
                 })
                 .catch(error => {
-                    resolve({
-                        errorCode: error?.errno,
-                        errorMessage: error?.sqlMessage
-                    });
-                })
-        });
-    }
-
-    public async delete(featureId: number): Promise<IErrorResponse> {
-        return new Promise<IErrorResponse>(resolve => {
-            const sql = "DELETE FROM feature WHERE feature_id = ?;";
-            this.db.execute(sql, [featureId])
-                .then(async result => {
-                    const deleteInfo: any = result[0];
-                    const deletedRowCount: number = +(deleteInfo?.affectedRows);
-
-                    if (deletedRowCount === 1) {
-                        resolve({
-                            errorCode: 0,
-                            errorMessage: "One record deleted."
-                        });
-                    } else {
-                        resolve({
-                            errorCode: -1,
-                            errorMessage: "This record could not be deleted because it does not exist."
-                        });
-                    }
-                })
-                .catch(error => {
-                    if (error?.errno === 1451) {
-                        resolve({
-                            errorCode: -2,
-                            errorMessage: "This record could not be deleted beucase it has subcategories."
-                        });
-                        return;
-                    }
-
                     resolve({
                         errorCode: error?.errno,
                         errorMessage: error?.sqlMessage
