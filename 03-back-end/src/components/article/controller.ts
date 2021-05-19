@@ -206,6 +206,21 @@ class ArticleController extends BaseController {
 
         res.send(await this.services.articleService.getById(id));
     }
+
+    public async deleteArticlePhoto(req: Request, res: Response) {
+        const articleId: number = +(req.params?.id);
+        const photoId: number = +(req.params?.id);
+
+        if(articleId <= 0 || photoId <= 0) return res.sendStatus(400);
+
+        const result = await this.services.articleService.deleteArticlePhoto(articleId, photoId)
+
+        if (result === null) return res.sendStatus(404);
+
+        res.send(result);
+    }
+
+
 }
 
 export default ArticleController;
