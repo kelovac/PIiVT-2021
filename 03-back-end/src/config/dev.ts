@@ -28,6 +28,34 @@ const Config: IConfig = {
         timeout: 60000,
         temporaryDirectory: '../temp/',
         uploadDestinationDirectory: 'static/uploads/',
+        photos: {
+            limits: {
+                minWidth: 320,
+                minHeight: 200,
+                maxWidth: 1920,
+                maxHeight: 1440,
+            },
+            resizes: [
+                {
+                    sufix: "-medium",
+                    fit: "cover",
+                    width: 800,
+                    height: 600,
+                },
+                {
+                    sufix: "-small",
+                    fit: "cover",
+                    width: 400,
+                    height: 300,
+                },
+                {
+                    sufix: "-thumb",
+                    fit: "cover",
+                    width: 250,
+                    height: 200,
+                },
+            ],
+        },
     },
 };
 

@@ -3,6 +3,8 @@ import { Request, Response } from 'express';
 import { IAddArticle, IAddArticleValidator, IUploadedPhoto } from './dto/IAddArticle';
 import Config from '../../config/dev';
 import { v4 } from "uuid";
+import { UploadedFile } from 'express-fileupload';
+import sizeOf from "image-size";
 
 class ArticleController extends BaseController {
     public async getById(req: Request, res: Response) {
@@ -31,7 +33,49 @@ class ArticleController extends BaseController {
         res.send(item);
     }
 
-    public async add(req: Request, res: Response) {
+    private isPhotoValid(file: UploadedFile): { isOk: boolean; message?: string } {
+        const size = sizeOf(file.tempFilePath);
+
+        const limits = Config.fileUpload.photos.limits;
+
+        if (size.width < limits.minWidth) {
+            return {
+                isOk: false,
+                message: `The image must have a width of at least ${limits.minWidth}px.`,
+            }
+        }
+
+        if (size.width < limits.minHeight) {
+            return {
+                isOk: false,
+                message: `The image must have a width of at least ${limits.minHeight}px.`,
+            }
+        }
+
+        if (size.width > limits.minWidth) {
+            return {
+                isOk: false,
+                message: `The image must have a width of at most ${limits.minWidth}px.`,
+            }
+        }
+
+        if (size.width > limits.minHeight) {
+            return {
+                isOk: false,
+                message: `The image must have a width of at most ${limits.minHeight}px.`,
+            }
+        }
+
+
+
+
+
+        return {
+            isOk: true,
+        };
+    }
+
+    private async uploadFiles(req: Request, res: Response): Promise<IUploadedPhoto[]> {
         if (!req.files || Object.keys(req.files).length === 0) {
             res.status(400).send("You must upload at lease one and a maximum of " + Config.fileUpload.maxFiles + " photos.");
             return;
@@ -43,6 +87,13 @@ class ArticleController extends BaseController {
 
         for (const fileKey of fileKeys) {
             const file = req.files[fileKey] as any;
+
+            const result = this.isPhotoValid(file);
+            
+            if (result.isOk === false){
+                res.status(400).send(`Errror with image ${fileKey}: "${result.message}".`);
+                return [];
+            }
 
             const randomString = v4();
             const originalName = file?.name;
@@ -61,6 +112,18 @@ class ArticleController extends BaseController {
             });
         }
 
+
+        return uploadedPhotos;
+    }
+
+    public async add(req: Request, res: Response) {
+        const uploadedPhotos = await this.uploadFiles(req, res);
+
+        if (uploadedPhotos.length === 0) {
+            res.sendStatus(400);
+            return;
+        }
+        
         const data = JSON.parse(req.body?.data);
 
         if (!IAddArticleValidator(data)) {
