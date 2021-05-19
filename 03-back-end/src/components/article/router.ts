@@ -9,5 +9,6 @@ export default class ArticleRouter implements IRouter {
 
         application.get('/article/:id', articleController.getById.bind(articleController));
         application.post('/article',    articleController.add.bind(articleController));
+        application.put('/article/:id', articleController.edit.bind(articleController));
     }
 }
