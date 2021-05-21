@@ -13,6 +13,7 @@ import ArticleRouter from './components/article/router';
 import * as fileUpload from "express-fileupload";
 import AdministratorService from './components/administrator/service';
 import AdministratorRouter from './components/administrator/router';
+import UserService from './components/user/service';
 
 async function main() {
     const application: express.Application = express();
@@ -49,10 +50,11 @@ async function main() {
     resources.databaseConnection.connect();
 
     resources.services = {
-        categoryService: new CategoryService(resources),
-        featureService:  new FeatureService(resources),
-        articleService:  new ArticleService(resources),
+        categoryService:      new CategoryService(resources),
+        featureService:       new FeatureService(resources),
+        articleService:       new ArticleService(resources),
         administratorService: new AdministratorService(resources),
+        userService:          new UserService(resources), 
     };
 
     application.use(
