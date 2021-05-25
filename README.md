@@ -8,8 +8,8 @@ Ovde se nalazi projekat za predmeta Praktikum - Internet i veb tehnologije - 202
 
 * U direktorijumu [01-documentation](./01-documentation) se nalazi dokumentacija...
 * U direktorijumu [02-resources](./02-resources) se nalaze dodatni materijali...
-* U direktorijumu [03-back-end](./03-back-end) se nalazi kôd projekta za API.
-* U direktorijumu [04-front-end](./03-front-end) se nalazi kôd projekta za front end deo aplikacije.
+* U direktorijumu [03-back-end](./03-back-end) se nalazi kod projekta za API.
+* U direktorijumu [04-front-end](./03-front-end) se nalazi kod projekta za front end deo aplikacije.
 
 ## Kako se pokreće aplikacija
 
