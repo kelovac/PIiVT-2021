@@ -20,7 +20,7 @@ export default function Application() {
           <Switch>
             <Route exact path="/" component={ HomePage } />
 
-            <Route path="/category" component={ CategoryPage } />
+            <Route path="/category/:cid?" component={ CategoryPage } />
 
             <Route path="/contact">
               <ContactPage 
