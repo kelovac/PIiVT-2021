@@ -1,9 +1,9 @@
-import React from 'react';
+import BasePage from '../BasePage/BasePage';
 
-export default class CategoryPage extends React.Component {
+export default class CategoryPage extends BasePage<{}> {
     // ...
 
-    render(): JSX.Element {
+    renderMain(): JSX.Element {
         return (
             <p>Ovo su dostupne kategorije...</p>
         );

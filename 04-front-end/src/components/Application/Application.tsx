@@ -2,6 +2,7 @@ import React from 'react';
 import { Container } from 'react-bootstrap';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import CategoryPage from '../CategoryPage/CategoryPage';
+import ContactPage from '../ContactPage/ContactPage';
 import HomePage from '../HomePage/HomePage';
 import TopMenu from '../TopMenu/TopMenu';
 import './Application.sass';
@@ -22,7 +23,10 @@ export default function Application() {
             <Route path="/category" component={ CategoryPage } />
 
             <Route path="/contact">
-              Contact information
+              <ContactPage 
+                title="Our location in Belgrade"
+                address="Danijelovac 32, 11010 Beograd, Srbija"
+                phone="+381 11 30 94 094"/>
             </Route>
             
             <Route path="/profile">
