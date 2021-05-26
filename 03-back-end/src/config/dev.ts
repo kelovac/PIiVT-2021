@@ -100,8 +100,9 @@ const Config: IConfig = {
                 public: readFileSync("keystore/administrator-refresh.public", "utf-8"),
                 private: readFileSync("keystore/administrator-refresh.private", "utf-8"),
             },
-        }
-    }
+        },
+        allowRequestsEvenWithoutValidTokens: true,
+    },
 };
 
 export default Config;
