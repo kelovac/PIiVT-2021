@@ -79,15 +79,11 @@ export default class CategoryPage extends BasePage<CategoryPageProperties> {
                 this.setState({
                     title: "No categories found",
                     subcategories: [],
-                    showBackButton: true,
-                    parentCategoryId: null,
                 });
             } else {
                 this.setState({
                     title: "Unable to load categories",
                     subcategories: [],
-                    showBackButton: true,
-                    parentCategoryId: null,
                 });
             }
         });
