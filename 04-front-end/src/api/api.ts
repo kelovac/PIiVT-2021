@@ -70,7 +70,7 @@ export default function api(
 
             resolve({
                 status: 'error',
-                data: '' + err?.response,
+                data: err?.response,
             });
         });
     });
