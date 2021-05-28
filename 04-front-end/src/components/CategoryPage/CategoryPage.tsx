@@ -122,7 +122,7 @@ export default class CategoryPage extends BasePage<CategoryPageProperties> {
                     this.state.subcategories.length > 0
                     ? (
                         <>
-                            <p>Podkategorije:</p>
+                            <p>Potkategorije:</p>
                             <ul>
                                 {
                                     this.state.subcategories.map(

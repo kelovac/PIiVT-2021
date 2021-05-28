@@ -25,20 +25,20 @@ export default class AuthMiddleware {
         const [ tokenType, tokenString ] = token.trim().split(" ");
 
         if ( tokenType !== "Bearer" ) {
-            return res.status(400).send("Invalid auth token type specified.");
+            return res.status(401).send("Invalid auth token type specified.");
         }
 
         if ( typeof tokenString !== "string" || tokenString.length === 0 ) {
-            return res.status(400).send("Invalid auth token length.");
+            return res.status(401).send("Invalid auth token length.");
         }
 
-        const userTokenValidation            = this.validateTokenAsTokenByRole(tokenString, "user");
-        const administratorTokenValidation   = this.validateTokenAsTokenByRole(tokenString, "administrator");
+        const userTokenValidation          = this.validateTokenAsTokenByRole(tokenString, "user");
+        const administratorTokenValidation = this.validateTokenAsTokenByRole(tokenString, "administrator");
 
         let result;
 
         if (userTokenValidation.isValid === false && administratorTokenValidation.isValid === false) {
-            return res.status(500).send("Token validation error: " + userTokenValidation + " " + administratorTokenValidation);
+            return res.status(401).send("Token validation error: " + JSON.stringify(userTokenValidation) + " " + JSON.stringify(administratorTokenValidation));
         }
 
         if (userTokenValidation.isValid) {
@@ -48,7 +48,7 @@ export default class AuthMiddleware {
         }
 
         if (typeof result !== "object") {
-            return res.status(400).send("Bad auth token data."); 
+            return res.status(401).send("Bad auth token data.");
         }
 
         const data: ITokenData = result as ITokenData;
@@ -62,7 +62,7 @@ export default class AuthMiddleware {
         next();
     }
 
-    public static validateTokenAsTokenByRole(tokenString: string, role:UserRole): TokenValidationInformation {
+    private static validateTokenAsTokenByRole(tokenString: string, role: UserRole): TokenValidationInformation {
         try {
             const result = jwt.verify(tokenString, Config.auth[role].auth.public);
             return {
@@ -79,9 +79,9 @@ export default class AuthMiddleware {
 
     public static getVerifier(
         ... allowedRoles: UserRole[]
-        ): (req: Request, res: Response, next: NextFunction) => void {
-            return (req: Request, res: Response, next: NextFunction) => {
-                this.verifyAuthToken(req, res, next, allowedRoles);
-            }
-        }
+    ): (req: Request, res: Response, next: NextFunction) => void {
+        return (req: Request, res: Response, next: NextFunction) => {
+            this.verifyAuthToken(req, res, next, allowedRoles);
+        };
+    }
 }
