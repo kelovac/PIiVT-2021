@@ -25,7 +25,7 @@ export default class UserRegistration extends BasePage<{}> {
             email: "",
             password: "",
             forename: "",
-            surname:  "",
+            surname: "",
             phoneNumber: "",
             postalAddress: "",
 
@@ -34,17 +34,16 @@ export default class UserRegistration extends BasePage<{}> {
         }
     }
 
-
     renderMain(): JSX.Element {
         if (this.state.isRegistered) {
             return (
-                <Redirect to="/category" />
+                <Redirect to="/user/login" />
             );
         }
 
         return (
             <Row>
-                <Col sm={12}  lg={{ span: 10, offset: 1 }}>
+                <Col sm={12} lg={{ span: 10, offset: 1 }}>
                     <Card>
                         <Card.Body>
                             <Card.Title>
@@ -64,7 +63,7 @@ export default class UserRegistration extends BasePage<{}> {
                                                 />
                                             </Form.Group>
                                         </Col>
-
+                                        
                                         <Col xs={12} md={6}>
                                             <Form.Group>
                                                 <Form.Label>Password:</Form.Label>
@@ -81,19 +80,19 @@ export default class UserRegistration extends BasePage<{}> {
                                             <Form.Group>
                                                 <Form.Label>Forename:</Form.Label>
                                                 <Form.Control
-                                                    type="forename"
+                                                    type="text"
                                                     placeholder="Enter your forename here..."
                                                     value={ this.state.forename }
                                                     onChange={ this.onChangeInput("forename") }
                                                 />
                                             </Form.Group>
                                         </Col>
-
+                                        
                                         <Col xs={12} md={6}>
                                             <Form.Group>
                                                 <Form.Label>Surname:</Form.Label>
                                                 <Form.Control
-                                                    type="surname"
+                                                    type="text"
                                                     placeholder="Enter your surname here..."
                                                     value={ this.state.surname }
                                                     onChange={ this.onChangeInput("surname") }
@@ -105,13 +104,14 @@ export default class UserRegistration extends BasePage<{}> {
                                             <Form.Group>
                                                 <Form.Label>Postal address:</Form.Label>
                                                 <Form.Control as="textarea"
-                                                    placeholder="Enter your address here..."
+                                                    rows={3}
+                                                    placeholder="Enter your adress here..."
                                                     value={ this.state.postalAddress }
                                                     onChange={ this.onChangeInput("postalAddress") }
                                                 />
                                             </Form.Group>
                                         </Col>
-
+                                        
                                         <Col xs={12} md={6}>
                                             <Form.Group>
                                                 <Form.Label>Phone number:</Form.Label>
@@ -122,17 +122,15 @@ export default class UserRegistration extends BasePage<{}> {
                                                     onChange={ this.onChangeInput("phoneNumber") }
                                                 />
                                             </Form.Group>
+
+                                            <Form.Group className="d-grid">
+                                                <Button variant="primary" className="mt-3"
+                                                    onClick= { this.handleRegisterButtonClick.bind(this) } >
+                                                    Register
+                                                </Button>
+                                            </Form.Group>
                                         </Col>
                                     </Row>
-
-                                    
-
-                                    <Form.Group className="d-grid">
-                                        <Button variant="primary" className="mt-3"
-                                            onClick= { () => this.handleRegisterButtonClick() } >
-                                            Register
-                                        </Button>
-                                    </Form.Group>
 
                                     {
                                         this.state.message
@@ -164,10 +162,12 @@ export default class UserRegistration extends BasePage<{}> {
                 });
             }
 
+            console.log(res);
+
             this.setState({
                 message: res.message,
             });
-        })
+        });
     }
 
     private onChangeInput(field: "email" | "password" | "forename" | "surname" | "phoneNumber" | "postalAddress"): (event: React.ChangeEvent<HTMLInputElement>) => void {
@@ -177,6 +177,4 @@ export default class UserRegistration extends BasePage<{}> {
             });
         }
     }
-
-    
 }
