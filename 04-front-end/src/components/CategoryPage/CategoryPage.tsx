@@ -3,6 +3,10 @@ import BasePage, { BasePageProperties } from '../BasePage/BasePage';
 import CategoryModel from '../../../../03-back-end/src/components/category/model';
 import CategoryService from '../../services/CategoryService';
 import EventRegister from '../../api/EventRegister';
+import ArticleModel from '../../../../03-back-end/src/components/article/model';
+import ArticleService from '../../services/ArticleService';
+import ArticleItem from '../Article/ArticleItem';
+import { CardDeck } from 'react-bootstrap';
 
 class CategoryPageProperties extends BasePageProperties {
     match?: {
@@ -18,6 +22,7 @@ class CategoryPageState {
     showBackButton: boolean = false;
     parentCategoryId: number | null = null;
     isUserLoggedIn: boolean = true;
+    articles: ArticleModel[] = [];
 }
 
 export default class CategoryPage extends BasePage<CategoryPageProperties> {
@@ -32,6 +37,7 @@ export default class CategoryPage extends BasePage<CategoryPageProperties> {
             showBackButton: false,
             parentCategoryId: null,
             isUserLoggedIn: true,
+            articles: [],
         };
     }
 
@@ -41,12 +47,13 @@ export default class CategoryPage extends BasePage<CategoryPageProperties> {
     }
 
     private getCategoryData() {
-        const cId = this.getCategoryId();
+        const cid = this.getCategoryId();
 
-        if (cId === null) {
+        if (cid === null) {
             this.apiGetTopLevelCategories();
         } else {
-            this.apiGetCategory(cId);
+            this.apiGetCategory(cid);
+            this.apiGetArticles(cid);
         }
     }
 
@@ -88,6 +95,15 @@ export default class CategoryPage extends BasePage<CategoryPageProperties> {
                 subcategories: result.subcategories,
                 parentCategoryId: result.parentCategoryId,
                 showBackButton: true,
+            });
+        });
+    }
+
+    private apiGetArticles(cid: number) {
+        ArticleService.getArticleByCategoryId(cid)
+        .then(result => {
+            this.setState({
+                articles: result,
             });
         });
     }
@@ -163,6 +179,13 @@ export default class CategoryPage extends BasePage<CategoryPageProperties> {
                     )
                     : ""
                 }
+                <CardDeck className="row">
+                {
+                    this.state.articles.map(article => (
+                        <ArticleItem key={ "article-item-" + article.articleId } article={ article }/>
+                    ))
+                }
+                </CardDeck>
             </>
         );
     }
