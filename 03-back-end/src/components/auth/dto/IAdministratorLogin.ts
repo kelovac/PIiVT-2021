@@ -12,7 +12,7 @@ const IAdministratorLoginValidator = ajv.compile({
     properties: {
         username: {
             type: "string",
-            minLength: 8,
+            minLength: 5,
             maxLength: 255,
         },
         password: {
