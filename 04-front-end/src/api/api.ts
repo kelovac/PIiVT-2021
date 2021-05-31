@@ -142,9 +142,9 @@ function refreshTokenResponseHandler(res: AxiosResponse<any>, resolve: (data: st
 
 export function isRoleLoggedIn(role: ApiRole): Promise<boolean> {
     return new Promise<boolean>(resolve => {
-        api("get", "/auth" + role + "/ok", role)
+        api("get", "/auth/" + role + "/ok", role)
         .then(res => {
-            if (res?.data === "ok") return resolve(true);
+            if (res?.data === "OK") return resolve(true);
             resolve(false);
         })
         .catch(() => {
