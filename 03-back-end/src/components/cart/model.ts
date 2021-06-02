@@ -2,7 +2,7 @@ import IModel from '../../common/IModel.interface';
 import UserModel from '../user/model';
 import ArticleModel from '../article/model';
 
-type OrderStatus = 'pending' | 'rejected' | 'accepted' | 'completed'
+type OrderStatus = 'pending' | 'rejected' | 'accepted' | 'completed';
 
 class OrderModel implements IModel {
     orderId: number;
@@ -10,7 +10,7 @@ class OrderModel implements IModel {
     status: OrderStatus;
 }
 
-class CartArticleModel implements IModel{
+class CartArticleModel implements IModel {
     cartArticleId: number;
     quantity: number;
     articleId: number;
