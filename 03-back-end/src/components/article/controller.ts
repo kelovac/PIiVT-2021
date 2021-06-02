@@ -239,9 +239,7 @@ class ArticleController extends BaseController {
 
     public async getAllByCategoryId(req: Request, res: Response) {
         const id: number = +(req.params.id);
-
-        if ( id <= 0) return res.status(400).send("Invalid category ID value");
-
+        if (id <= 0) return res.status(400).send("Invalid category ID value.");
         res.send(await this.services.articleService.getAllByCategoryId(id));
     }
 }
