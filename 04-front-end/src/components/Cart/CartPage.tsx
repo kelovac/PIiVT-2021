@@ -204,7 +204,7 @@ export default class CartPage extends BasePage<{}> {
                                     <tr key={ "cart-article-" + ca.cartArticleId }>
                                         <td>
                                             <img alt={ ca.article.title }
-                                                src={ this.getThumbPath(AppConfiguration.API_URL + "/" + ca.article.photos[0].imagePath ) }
+                                                src={ this.getThumbPath(AppConfiguration.API_URL + "/" + ca.article.photos[0].imagePath) }
                                                 className="article-image" />
                                         </td>
                                         <td>
