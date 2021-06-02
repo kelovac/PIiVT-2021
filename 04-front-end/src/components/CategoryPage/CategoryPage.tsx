@@ -1,9 +1,9 @@
 import { Link, Redirect } from 'react-router-dom';
 import BasePage, { BasePageProperties } from '../BasePage/BasePage';
 import CategoryModel from '../../../../03-back-end/src/components/category/model';
+import ArticleModel from '../../../../03-back-end/src/components/article/model';
 import CategoryService from '../../services/CategoryService';
 import EventRegister from '../../api/EventRegister';
-import ArticleModel from '../../../../03-back-end/src/components/article/model';
 import ArticleService from '../../services/ArticleService';
 import ArticleItem from '../Article/ArticleItem';
 import { CardDeck } from 'react-bootstrap';
@@ -47,13 +47,13 @@ export default class CategoryPage extends BasePage<CategoryPageProperties> {
     }
 
     private getCategoryData() {
-        const cid = this.getCategoryId();
+        const cId = this.getCategoryId();
 
-        if (cid === null) {
+        if (cId === null) {
             this.apiGetTopLevelCategories();
         } else {
-            this.apiGetCategory(cid);
-            this.apiGetArticles(cid);
+            this.apiGetCategory(cId);
+            this.apiGetArticles(cId);
         }
     }
 
@@ -99,8 +99,8 @@ export default class CategoryPage extends BasePage<CategoryPageProperties> {
         });
     }
 
-    private apiGetArticles(cid: number) {
-        ArticleService.getArticleByCategoryId(cid)
+    private apiGetArticles(cId: number) {
+        ArticleService.getArticlesByCategoryId(cId)
         .then(result => {
             this.setState({
                 articles: result,
@@ -161,7 +161,7 @@ export default class CategoryPage extends BasePage<CategoryPageProperties> {
                     this.state.subcategories.length > 0
                     ? (
                         <>
-                            <p>Podkategorije:</p>
+                            <p>Potkategorije:</p>
                             <ul>
                                 {
                                     this.state.subcategories.map(
@@ -179,10 +179,11 @@ export default class CategoryPage extends BasePage<CategoryPageProperties> {
                     )
                     : ""
                 }
+
                 <CardDeck className="row">
                 {
                     this.state.articles.map(article => (
-                        <ArticleItem key={ "article-item-" + article.articleId } article={ article }/>
+                        <ArticleItem key={ "article-item-" + article.articleId } article={ article } />
                     ))
                 }
                 </CardDeck>
