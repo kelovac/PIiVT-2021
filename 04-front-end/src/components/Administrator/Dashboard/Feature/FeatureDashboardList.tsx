@@ -102,8 +102,31 @@ export default class FeatureDashboardList extends BasePage<FeatureDashboardListP
                         state.featureMessages.set(featureId, "");
                         return state;
                     });
+
+                    this.loadCategoryData();
                 }, 2000);
             })
+        };
+    }
+
+    private getFeatureDeleteButtonClickHandler(featureId: number): () => void {
+        return () => {
+            FeatureService.deleteFeature(featureId)
+            .then(res => {
+                const message = res ? "Deleted." : "Could not delete feature.";
+
+                this.setState((state: FeatureDashboardListState) => {
+                    state.featureMessages.set(featureId, message);
+                    return state;
+                });
+
+                setTimeout(() => {
+                    this.setState((state: FeatureDashboardListState) => {
+                        state.featureMessages.set(featureId, "");
+                        return state;
+                    });
+                }, 2000);
+            });
         };
     }
 
@@ -148,7 +171,7 @@ export default class FeatureDashboardList extends BasePage<FeatureDashboardListP
                                             &nbsp;
 
                                             <Button variant="danger" size="sm"
-                                                    onClick={ () => {} }>
+                                                    onClick={ this.getFeatureDeleteButtonClickHandler(f.featureId) }>
                                                 Delete
                                             </Button>
                                         </td>
