@@ -289,13 +289,13 @@
 							"formdata": [
 								{
 									"key": "data",
-									"value": "{\n    \"title\": \"Softver za video\",\n    \"excerpt\": \"Ovo je kratak opis\",\n    \"description\": \"Ovo je detaljan opis\",\n    \"isActive\": true,\n    \"isPromoted\": false,\n    \"prices\": 450.32,\n    \"categoryId\": 2,\n    \"features\": [\n\t\t{\n\t\t\t\"featureId\": 7,\n\t\t\t\"value\": \"ACME\"\n\t\t},\n\t\t{\n\t\t\t\"featureId\": 9,\n\t\t\t\"value\": \"2019\"\n\t\t},\n\t\t],\n}",
+									"value": "{\n   \"title\":\"Hard Disk3\",\n   \"excerpt\":\"Ovo je kratak opis\",\n   \"description\":\"Ovo je detaljan opis\",\n   \"isActive\":true,\n   \"isPromoted\":false,\n   \"price\":450.32,\n   \"categoryId\":5,\n   \"features\":[\n      {\n         \"featureId\":7,\n         \"value\":\"ACME\"\n      },\n      {\n         \"featureId\":9,\n         \"value\":\"2019\"\n      }\n   ]\n}",
 									"type": "text"
 								},
 								{
 									"key": "photo1",
 									"type": "file",
-									"src": "/C:/Users/Dada/Desktop/download.jpg"
+									"src": "/C:/Users/Dada/Desktop/hdd.jpg"
 								}
 							]
 						},
@@ -390,13 +390,13 @@
 							]
 						},
 						"url": {
-							"raw": "{{API_URL}}/article/1/photo",
+							"raw": "{{API_URL}}/article/3/photo",
 							"host": [
 								"{{API_URL}}"
 							],
 							"path": [
 								"article",
-								"1",
+								"3",
 								"photo"
 							]
 						}
@@ -409,13 +409,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{API_URL}}/category/3/article",
+							"raw": "{{API_URL}}/category/4/article",
 							"host": [
 								"{{API_URL}}"
 							],
 							"path": [
 								"category",
-								"3",
+								"4",
 								"article"
 							]
 						}
@@ -428,7 +428,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWRlbnRpdHkiOiJkcmFnYW4iLCJyb2xlIjoiYWRtaW5pc3RyYXRvciIsImlhdCI6MTYyMjYzODE4MywiZXhwIjoxNjIzMjQyOTgzLCJpc3MiOiJsb2NhbGhvc3QifQ.EV2xmZuBYDfPvMs1fQZMcxcvF9Nn1TAHo8u5bH-tLBVqFZx_ofkZZx1NxZAdCaDAttc9F1G1luZQoqO-JgstsgAxCZTxDLLFymijH7qcE0a2181gJRRoETTw0VkQbQMtF02l_0uW-oPtW5K24P0nbDBrXQKjcR5LujaNlQpf7otLorPAmtxvin2tt_qCSEyUXiABQyIIjyASlTO41okzcqZ-JrWzwcBKEFIkGAM6gTPrTFDmWgHgHxDIw0Thx6eA-QTuvpB4AL4LbzAH4mVg2iLZWGELzSMLPAeIrAWoIGSS0iQk1B074hEUgOtULUepd2tFLNXJX9ElXsXpZmoFRw",
+						"value": "{{API_ADMINISTRATOR_AUTH_TOKEN}}",
 						"type": "string"
 					}
 				]

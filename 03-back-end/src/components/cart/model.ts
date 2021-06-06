@@ -15,7 +15,6 @@ class CartArticleModel implements IModel {
     quantity: number;
     articleId: number;
     article: ArticleModel;
-    imagePath: string;
 }
 
 export default class CartModel implements IModel {
