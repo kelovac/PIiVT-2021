@@ -2,6 +2,7 @@ import ArticleModel, { ArticlePrice } from '../../../03-back-end/src/components/
 import api, { apiAsForm } from '../api/api';
 import EventRegister from '../api/EventRegister';
 import * as path from "path";
+import { ApiRole } from '../api/api';
 
 export interface IAddArticle {
     title: string;
@@ -17,6 +18,22 @@ export interface IAddArticle {
 }
 
 export default class ArticleService {
+    public static getAllArticles(role: ApiRole = "user"): Promise<ArticleModel[]> {
+        return new Promise<ArticleModel[]>(resolve => {
+            api("get", "/article", role)
+            .then(res => {
+                if (res?.status !== "ok") {
+                    if (res.status === "login") {
+                        EventRegister.emit("AUTH_EVENT", "force_login");
+                    }
+                    return resolve([]);
+                }
+
+                resolve(res.data as ArticleModel[]);
+            });
+        });
+    }
+    
     public static getArticleById(articleId: number): Promise<ArticleModel|null> {
         return new Promise<ArticleModel|null>(resolve => {
             api("get", "/article/" + articleId, "user")

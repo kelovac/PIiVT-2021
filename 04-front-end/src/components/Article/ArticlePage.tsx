@@ -155,7 +155,7 @@ export default class ArticlePage extends BasePage<ArticlePageProperties> {
                         <Card className="mt-3">
                             <Card.Body>
                                 <Card.Title>
-                                    <b>Features</b> (list style)
+                                    <b>Features</b>
                                 </Card.Title>
                                 <Card.Text as="div">
                                     <ul>
@@ -167,34 +167,6 @@ export default class ArticlePage extends BasePage<ArticlePageProperties> {
                                             ))
                                         }
                                     </ul>
-                                </Card.Text>
-                            </Card.Body>
-                        </Card>
-
-                        <Card className="mt-3">
-                            <Card.Body>
-                                <Card.Title>
-                                    <b>Features</b> (table style)
-                                </Card.Title>
-                                <Card.Text as="div">
-                                    <table className="table table-hover table-sm">
-                                        <tr>
-                                            <th>Feature</th>
-                                            <th>Value</th>
-                                        </tr>
-                                        {
-                                            article.features.map(af => (
-                                                <tr key={ "table-article-feature-value-" + af.featureId }>
-                                                    <th>
-                                                        { af.name }
-                                                    </th>
-                                                    <td>
-                                                        { af.value }
-                                                    </td>
-                                                </tr>
-                                            ))
-                                        }
-                                    </table>
                                 </Card.Text>
                             </Card.Body>
                         </Card>
